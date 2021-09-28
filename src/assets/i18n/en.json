@@ -52,7 +52,31 @@
     "you-have-marked-this-representative-as-trusted": "You have marked this representative as trusted, meaning its status will remain \"Good\" even in case of severe issues with uptime or weight distribution."
   },
   "configure-app": {
-    "language": "Language"
+    "advanced-options": "Advanced Options",
+    "api-server": "API Server",
+    "change-the-currency-pair-used-when-showing-fiat-values": "Change the currency pair used when showing fiat values in the application. Select None to hide fiat pairs.",
+    "clear-work-cache": "Clear Work Cache",
+    "component": {
+      "wallet-storage": "Wallet Storage"
+    },
+    "configure-nault": "Configure Nault",
+    "default-representative": "Default Representative",
+    "delete-all-data": "Delete ALL Data",
+    "delete-wallet-data": "Delete Wallet Data",
+    "display-settings": "Display Settings",
+    "fiat-currency": "FIAT Currency",
+    "language": "Language",
+    "lock-after-inactivity": "Lock After Inactivity",
+    "min-receive-amount": "Min. Receive Amount",
+    "night-mode": "Night Mode",
+    "pow-multiplier": "PoW Multiplier",
+    "pow-source": "PoW Source",
+    "receive-method": "Receive Method",
+    "server-configuration": "Server Configuration",
+    "server-settings": "Server Settings",
+    "wallet-settings": "Wallet Settings",
+    "websocket-server": "WebSocket Server",
+    "work-server": "Work Server"
   },
   "general": {
     "account": "Account",
