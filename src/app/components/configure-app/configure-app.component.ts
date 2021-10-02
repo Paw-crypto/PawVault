@@ -40,10 +40,10 @@ export class ConfigureAppComponent implements OnInit {
     private ninja: NinjaService,
     private renderer: Renderer2,
     private qrModalService: QrModalService,
-    private translate: TranslocoService) { }
+    private translocoService: TranslocoService) { }
   wallet = this.walletService.wallet;
 
-  languages = this.translate.getAvailableLangs() as [{id: string, label: string}];
+  languages = this.translocoService.getAvailableLangs() as [{id: string, label: string}];
   selectedLanguage = this.languages[0].id;
 
   denominations = [
@@ -54,8 +54,8 @@ export class ConfigureAppComponent implements OnInit {
   selectedDenomination = this.denominations[0].value;
 
   storageOptions = [
-    { name: 'Browser Local Storage', value: 'localStorage' },
-    { name: 'None', value: 'none' },
+    { name: this.translocoService.translate('configure-app.storage-options.browser-local-storage'), value: 'localStorage' },
+    { name: this.translocoService.translate('configure-app.storage-options.none'), value: 'none' },
   ];
   selectedStorage = this.storageOptions[0].value;
 
@@ -322,7 +322,7 @@ export class ConfigureAppComponent implements OnInit {
     }
 
     this.appSettings.setAppSetting('language', this.selectedLanguage);
-    this.translate.setActiveLang(this.selectedLanguage);
+    this.translocoService.setActiveLang(this.selectedLanguage);
 
     // if (updatePrefixes) {
     //   this.appSettings.setAppSetting('displayPrefix', this.selectedPrefix);

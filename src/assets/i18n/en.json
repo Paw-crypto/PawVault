@@ -90,6 +90,10 @@
     "save-settings-to-update": "Save settings to update",
     "server-configuration": "Server Configuration",
     "server-settings": "Server Settings",
+    "storage-options": {
+      "browser-local-storage": "Browser Local Storage",
+      "none": "None"
+    },
     "this-has-to-be-a-valid-authorization-header": "This has to be a valid Authorization header.",
     "this-has-to-be-a-valid-rpc": {
       "1": "This has to be a valid",
