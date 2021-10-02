@@ -8,7 +8,7 @@
       </div>
       <div class="uk-card-body">
         <div uk-grid>
-          
+
           <div class="uk-width-1-1">
             <div class="uk-form-horizontal">
 
@@ -142,7 +142,7 @@
                   <div class="uk-form-controls">
                       <input [(ngModel)]="customWorkServer" class="uk-input uk-margin-small-bottom" type="text" placeholder="http://my-work-server:port">
                       <span class="uk-text-meta">
-                        This has to be a valid <a href="https://docs.nault.cc/2021/02/13/custom-work-server.html" target="_blank" rel="noopener noreferrer">Nano Work Server</a> endpoint or an API compliant with it.
+                        {{ 'configure-app.this-has-to-be-a-valid-work.1' | transloco }} <a href="https://docs.nault.cc/2021/02/13/custom-work-server.html" target="_blank" rel="noopener noreferrer">{{ 'configure-app.this-has-to-be-a-valid-work.2-link-work' | transloco }}</a> {{ 'configure-app.this-has-to-be-a-valid-work.3' | transloco }}
                       </span>
                   </div>
               </div>
@@ -164,7 +164,7 @@
             <div class="uk-form-horizontal">
 
               <div class="uk-margin">
-                <label class="uk-form-label">{{ 'configure-app.receive-method' | transloco }} <span uk-icon="icon: info;" uk-tooltip title="If automatically receiving incoming transactions with the largest amount first or chronological from recorded time. Manual will allow you to pick your own transactions from the receive screen."></span></label>
+                <label class="uk-form-label">{{ 'configure-app.receive-method' | transloco }} <span uk-icon="icon: info;" uk-tooltip [title]="t('configure-app.if-automatically-receiving-incoming-transactions-with-the')"></span></label>
                 <div class="uk-form-controls">
 
                   <div class="uk-inline uk-width-1-1">
@@ -210,13 +210,13 @@
                     
                     <div *ngIf="(representativeResults$ | async).length" [hidden]="!showRepresentatives" class="nlt-dropdown uk-animation-slide-down-small uk-width-1-1 uk-card uk-card-default uk-card-body uk-position-absolute" style="z-index: 15000">
                       <ul class="uk-nav uk-nav-default">
-                        <li class="uk-nav-header">Representative List Results</li>
+                        <li class="uk-nav-header">{{ 'representative-search.representative-list-results' | transloco }}</li>
                         <li class="uk-nav-divider"></li>
                         <li *ngFor="let rep of representativeResults$ | async">
                           <a (click)="selectRepresentative(rep.id)">
                             {{ rep.name }}
                             <span *ngIf="rep.trusted" class="uk-text-success" style="margin-left: 4px;"><span uk-icon="icon: star;"></span></span>
-                            <span *ngIf="rep.warn" class="uk-text-warning" style="margin-left: 4px;"><span uk-icon="icon: warning;"></span> Avoid</span>
+                            <span *ngIf="rep.warn" class="uk-text-warning" style="margin-left: 4px;"><span uk-icon="icon: warning;"></span> {{ 'general.avoid' | transloco }}</span>
                           </a>
                         </li>
                       </ul>
@@ -276,7 +276,7 @@
                   <div class="uk-inline uk-width-1-1" *ngIf="showServerConfigs()">
                     <input [(ngModel)]="serverAPI" class="uk-input uk-margin-small-bottom" type="text" placeholder="https://domain.com/path">
                     <span class="uk-text-meta">
-                      This has to be a valid <a href="https://docs.nano.org/commands/rpc-protocol/" target="_blank" rel="noopener noreferrer">Nano RPC endpoint</a> or an API compliant with it.
+                      {{ 'configure-app.this-has-to-be-a-valid-rpc.1' | transloco }} <a href="https://docs.nano.org/commands/rpc-protocol/" target="_blank" rel="noopener noreferrer">{{ 'configure-app.this-has-to-be-a-valid-rpc.2-link-rpc' | transloco }}</a> {{ 'configure-app.this-has-to-be-a-valid-rpc.3' | transloco }}
                     </span>
                   </div>
                 </div>
@@ -287,7 +287,7 @@
           <div class="uk-width-1-1" *ngIf="showServerValues()">
             <div class="uk-form-horizontal">
               <div class="">
-                <label class="uk-form-label uk-text-right">{{ 'configure-app.websocket-server' | transloco }} <span uk-icon="icon: info;" uk-tooltip title="This server is used to notify the wallet in real time when new transactions arrive"></span></label>
+                <label class="uk-form-label uk-text-right">{{ 'configure-app.websocket-server' | transloco }} <span uk-icon="icon: info;" uk-tooltip [title]="t('configure-app.this-server-is-used-to-notify-the-wallet-in-real-time-when')"></span></label>
                 <div class="uk-form-controls">
                   <div class="uk-inline uk-width-1-1" *ngIf="!showServerConfigs()">
                     <strong>{{ serverWS }}</strong>
@@ -296,8 +296,8 @@
                   <div class="uk-inline uk-width-1-1" *ngIf="showServerConfigs()">
                     <input [(ngModel)]="serverWS" class="uk-input uk-margin-small-bottom" id="form-horizontal-text2" type="text" placeholder="wss://domain.com/path">
                     <span class="uk-text-meta">
-                      This has to be a <a href="https://docs.nano.org/integration-guides/websockets/#configuration" target="_blank" rel="noopener noreferrer">Nano Node Websocket</a> or a WebSocket API compliant with it.<br>
-                      <i>Note: Since this server only notifies about new transactions, most of the wallet functions fine without it.</i>
+                      {{ 'configure-app.this-has-to-be-a-valid-websocket.1' | transloco }} <a href="https://docs.nano.org/integration-guides/websockets/#configuration" target="_blank" rel="noopener noreferrer">{{ 'configure-app.this-has-to-be-a-valid-websocket.2-link-websocket' | transloco }}</a> {{ 'configure-app.this-has-to-be-a-valid-websocket.3' | transloco }}<br>
+                      <i>{{ 'configure-app.note-since-this-server-only-notifies-about-new-transactions' | transloco }}</i>
                     </span>
                   </div>
                 </div>
@@ -336,7 +336,7 @@
                       <table id="node-stats-table">
                         <tr>
                           <td>
-                            <strong>Server</strong>
+                            <strong>{{ 'general.server' | transloco }}</strong>
                           </td>
                           <td>
                             {{serverAPIUpdated ? serverAPI: ('configure-app.save-settings-to-update' | transloco)}}
@@ -344,7 +344,7 @@
                         </tr>
                         <tr>
                           <td>
-                            <strong>Block Count</strong>
+                            <strong>{{ 'general.block-count' | transloco }}</strong>
                           </td>
                           <td>
                             {{nodeBlockCount || 'N/A'}}
@@ -352,7 +352,7 @@
                         </tr>
                         <tr>
                           <td>
-                            <strong>Uncemented Blocks</strong>
+                            <strong>{{ 'general.uncemented-blocks' | transloco }}</strong>
                           </td>
                           <td>
                             {{nodeUncemented || 'N/A'}}
@@ -360,7 +360,7 @@
                         </tr>
                         <tr>
                           <td>
-                            <strong>Peers Stake Required</strong>
+                            <strong>{{ 'general.peers-stake-required' | transloco }}</strong>
                           </td>
                           <td>
                             {{peersStakeReq || 'N/A'}}
@@ -368,7 +368,7 @@
                         </tr>
                         <tr>
                           <td>
-                            <strong>Peers Stake Total</strong>
+                            <strong>{{ 'general.peers-stake-total' | transloco }}</strong>
                           </td>
                           <td>
                             {{peersStakeTotal || 'N/A'}}
@@ -376,7 +376,7 @@
                         </tr>
                         <tr>
                           <td>
-                            <strong>Node Version</strong>
+                            <strong>{{ 'general.node-version' | transloco }}</strong>
                           </td>
                           <td>
                             {{nodeVendor || 'N/A'}}
@@ -384,7 +384,7 @@
                         </tr>
                         <tr>
                           <td>
-                            <strong>Network</strong>
+                            <strong>{{ 'general.network' | transloco }}</strong>
                           </td>
                           <td>
                             {{nodeNetwork || 'N/A'}}
@@ -392,7 +392,7 @@
                         </tr>
                         <tr *ngIf="showServerValues() && !showServerConfigs()">
                           <td>
-                            <strong>Random Server</strong>
+                            <strong>{{ 'configure-app.random-server' | transloco }}</strong>
                           </td>
                           <td>
                             {{shouldRandom || ('general.no' | transloco)}}
@@ -432,9 +432,6 @@
           </div>
         </div>
       </div>
-      <!--<div class="uk-card-footer uk-text-right">-->
-        <!--<button (click)="updateWalletSettings()" class="uk-button uk-button-secondary">Update Wallet Settings</button>-->
-      <!--</div>-->
     </div>
 
   </div>
