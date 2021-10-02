@@ -126,6 +126,7 @@
       "browser-local-storage": "Browser Local Storage",
       "none": "None"
     },
+    "successfully-updated": "Successfully updated!",
     "this-has-to-be-a-valid-authorization-header": "This has to be a valid Authorization header.",
     "this-has-to-be-a-valid-rpc": {
       "1": "This has to be a valid",

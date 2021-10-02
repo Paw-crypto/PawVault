@@ -312,7 +312,7 @@ export class ConfigureAppComponent implements OnInit {
     const newCurrency = this.selectedCurrency;
     // const updatePrefixes = this.appSettings.settings.displayPrefix !== this.selectedPrefix;
     const reloadFiat = this.appSettings.settings.displayCurrency !== newCurrency;
-    this.notifications.sendSuccess(`App display settings successfully updated!`);
+    this.notifications.sendSuccess(this.translocoService.translate('configure-app.successfully-updated'));
 
     if (reloadFiat) {
       // Reload prices with our currency, then call to reload fiat balances.
@@ -429,7 +429,7 @@ export class ConfigureAppComponent implements OnInit {
     };
 
     this.appSettings.setAppSettings(newSettings);
-    this.notifications.sendSuccess(`App wallet settings successfully updated!`);
+    this.notifications.sendSuccess(this.translocoService.translate('configure-app.successfully-updated'));
 
     if (resaveWallet) {
       this.walletService.saveWalletExport(); // If swapping the storage engine, resave the wallet
@@ -471,11 +471,7 @@ export class ConfigureAppComponent implements OnInit {
     this.appSettings.setAppSettings(newSettings);
     this.appSettings.loadAppSettings();
 
-    if (this.selectedServer !== 'offline') {
-      this.notifications.sendSuccess(`Server settings successfully updated, reconnecting to backend`);
-    } else {
-      this.notifications.sendSuccess(`Server settings successfully updated. Now in offline mode.`);
-    }
+    this.notifications.sendSuccess(this.translocoService.translate('configure-app.successfully-updated'));
 
     this.node.node.status = false; // Directly set node to offline since API url changed.  Status will get set by reloadBalances
 
