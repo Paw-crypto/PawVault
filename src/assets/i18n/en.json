@@ -65,12 +65,25 @@
       "wallet-storage": "Wallet Storage"
     },
     "configure-nault": "Configure Nault",
+    "currencies": {
+      "none": "None"
+    },
     "default-representative": "Default Representative",
     "delete-all-data": "Delete ALL Data",
     "delete-wallet-data": "Delete Wallet Data",
     "display-settings": "Display Settings",
     "fiat-currency": "FIAT Currency",
     "for-example-using-basic-auth": "For example using basic auth: Basic xyz",
+    "identicon-options": {
+      "1-hour": "1 Hour",
+      "1-minute": "1 Minute",
+      "nanoidenticons-by-keerifox": "Nanoidenticons (by keerifox)",
+      "natricon-by-appditto": "Natricon (by Appditto)",
+      "never": "Never",
+      "none": "None",
+      "x-hours": "{{ hours }} Hours",
+      "x-minutes": "{{ minutes }} Minutes"
+    },
     "identicons": "Identicons",
     "if-automatically-receiving-incoming-transactions-with-the": "If automatically receiving incoming transactions with the largest amount first or chronological from recorded time. Manual will allow you to pick your own transactions from the receive screen.",
     "language": "Language",
@@ -79,11 +92,30 @@
     "lock-after-inactivity": "Lock After Inactivity",
     "min-receive-amount": "Min. Receive Amount",
     "minimum-nano-amount-to-receive-transactions-below-this": "Minimum NANO amount to receive. Transactions below this amount will be ignored by the wallet both for receiving and in the transactions list.  Set to blank or 0 to accept all transactions.",
+    "multiplier-options": {
+      "default-1x-or-1-64x": "Default (1x or 1/64x)"
+    },
     "night-mode": "Night Mode",
+    "night-mode-options": {
+      "disabled": "Disabled",
+      "enabled": "Enabled"
+    },
     "node-stats": "Node Stats",
     "note-since-this-server-only-notifies-about-new-transactions": "Note: Since this server only notifies about new transactions, most of the wallet functions fine without it.",
     "optional-increased-work-for-transaction-priority-during": "Optional increased work for transaction priority during network saturation. Overrides both default SEND 1x and RECEIVE 1/64x difficulties.",
+    "pending-options": {
+      "automatic-largest-amount-first": "Automatic - Largest Amount First",
+      "automatic-oldest-transaction-first": "Automatic - Oldest Transaction First",
+      "manual": "Manual"
+    },
     "pow-multiplier": "PoW Multiplier",
+    "pow-options": {
+      "best-option-available": "Best Option Available",
+      "client-side-cpu-slowest": "Client-side - CPU (Slowest)",
+      "client-side-gpu-webgl": "Client-side - GPU/WebGL",
+      "external-custom-server": "External - Custom Server",
+      "external-selected-server": "External - Selected Server"
+    },
     "pow-source": "PoW Source",
     "random-server": "Random Server",
     "receive-method": "Receive Method",

@@ -60,7 +60,7 @@ export class ConfigureAppComponent implements OnInit {
   selectedStorage = this.storageOptions[0].value;
 
   currencies = [
-    { name: 'None', value: '' },
+    { name: this.translocoService.translate('configure-app.currencies.none'), value: '' },
     { name: 'USD - US Dollar', value: 'USD' },
     { name: 'BTC - Bitcoin', value: 'BTC' },
     { name: 'AUD - Australian Dollar', value: 'AUD' },
@@ -98,40 +98,40 @@ export class ConfigureAppComponent implements OnInit {
   selectedCurrency = this.currencies[0].value;
 
   nightModeOptions = [
-    { name: 'Enabled', value: 'enabled' },
-    { name: 'Disabled', value: 'disabled' },
+    { name: this.translocoService.translate('configure-app.night-mode-options.enabled'), value: 'enabled' },
+    { name: this.translocoService.translate('configure-app.night-mode-options.disabled'), value: 'disabled' },
   ];
   selectedNightModeOption = this.nightModeOptions[0].value;
 
   identiconOptions = [
-    { name: 'None', value: 'none' },
-    { name: 'Nanoidenticons (by keerifox)', value: 'nanoidenticons' },
-    { name: 'Natricon (by Appditto)', value: 'natricon' },
+    { name: this.translocoService.translate('configure-app.identicon-options.none'), value: 'none' },
+    { name: this.translocoService.translate('configure-app.identicon-options.nanoidenticons-by-keerifox'), value: 'nanoidenticons' },
+    { name: this.translocoService.translate('configure-app.identicon-options.natricon-by-appditto'), value: 'natricon' },
   ];
   selectedIdenticonOption = this.identiconOptions[0].value;
 
   inactivityOptions = [
-    { name: 'Never', value: 0 },
-    { name: '1 Minute', value: 1 },
-    { name: '5 Minutes', value: 5 },
-    { name: '15 Minutes', value: 15 },
-    { name: '30 Minutes', value: 30 },
-    { name: '1 Hour', value: 60 },
-    { name: '6 Hours', value: 360 },
+    { name: this.translocoService.translate('configure-app.identicon-options.never'), value: 0 },
+    { name: this.translocoService.translate('configure-app.identicon-options.1-minute'), value: 1 },
+    { name: this.translocoService.translate('configure-app.identicon-options.x-minutes', { minutes: 5 }), value: 5 },
+    { name:  this.translocoService.translate('configure-app.identicon-options.x-minutes', { minutes: 15 }), value: 15 },
+    { name:  this.translocoService.translate('configure-app.identicon-options.x-minutes', { minutes: 30 }), value: 30 },
+    { name: this.translocoService.translate('configure-app.identicon-options.1-hour'), value: 60 },
+    { name: this.translocoService.translate('configure-app.identicon-options.x-hours', { hours: 6 }), value: 360 },
   ];
   selectedInactivityMinutes = this.inactivityOptions[4].value;
 
   powOptions = [
-    { name: 'Best Option Available', value: 'best' },
-    { name: 'Client-side - GPU/WebGL', value: 'clientWebGL' },
-    { name: 'Client-side - CPU (Slowest)', value: 'clientCPU' },
-    { name: 'External - Selected Server', value: 'server' },
-    { name: 'External - Custom Server', value: 'custom' },
+    { name: this.translocoService.translate('configure-app.pow-options.best-option-available'), value: 'best' },
+    { name: this.translocoService.translate('configure-app.pow-options.client-side-gpu-webgl'), value: 'clientWebGL' },
+    { name: this.translocoService.translate('configure-app.pow-options.client-side-cpu-slowest'), value: 'clientCPU' },
+    { name: this.translocoService.translate('configure-app.pow-options.external-selected-server'), value: 'server' },
+    { name: this.translocoService.translate('configure-app.pow-options.external-custom-server'), value: 'custom' },
   ];
   selectedPoWOption = this.powOptions[0].value;
 
   multiplierOptions = [
-    { name: 'Default (1x or 1/64x)', value: 1 },
+    { name: this.translocoService.translate('configure-app.multiplier-options.default-1x-or-1-64x'), value: 1 },
     { name: '2x', value: 2 },
     { name: '4x', value: 4 },
     { name: '8x', value: 8 },
@@ -142,9 +142,9 @@ export class ConfigureAppComponent implements OnInit {
   selectedMultiplierOption: number = this.multiplierOptions[0].value;
 
   pendingOptions = [
-    { name: 'Automatic - Largest Amount First', value: 'amount' },
-    { name: 'Automatic - Oldest Transaction First', value: 'date' },
-    { name: 'Manual', value: 'manual' },
+    { name: this.translocoService.translate('configure-app.pending-options.automatic-largest-amount-first'), value: 'amount' },
+    { name: this.translocoService.translate('configure-app.pending-options.automatic-oldest-transaction-first'), value: 'date' },
+    { name: this.translocoService.translate('configure-app.pending-options.manual'), value: 'manual' },
   ];
   selectedPendingOption = this.pendingOptions[0].value;
 
