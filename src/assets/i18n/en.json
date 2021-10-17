@@ -59,16 +59,23 @@
     "change-the-currency-pair-used-when-showing-fiat-values": "Change the currency pair used when showing fiat values in the application. Select None to hide fiat pairs.",
     "change-where-your-wallet-is-stored-if-you-select-none-your": "Change where your wallet is stored. If you select none, your wallet is reset every time you reload.",
     "change-which-server-is-used-to-communicate-with-the-nano": "Change which server is used to communicate with the Nano network",
+    "clear-all-data": {
+      "successfully-deleted-locally-stored-data-and-reset-the": "Successfully deleted locally stored data and reset the settings!"
+    },
     "clear-work-cache": "Clear Work Cache",
     "click-to-refresh": "Click to refresh",
     "component": {
       "wallet-storage": "Wallet Storage"
     },
     "configure-nault": "Configure Nault",
+    "cpu-worker-support-not-available-set-pow-to-best": "CPU Worker support not available, set PoW to Best",
     "currencies": {
       "none": "None"
     },
+    "custom-api-server-has-an-invalid-address": "Custom API Server has an invalid address.",
+    "custom-update-server-has-an-invalid-address": "Custom Update Server has an invalid address.",
     "default-representative": "Default Representative",
+    "default-representative-is-not-a-valid-account": "Default representative is not a valid account",
     "delete-all-data": "Delete ALL Data",
     "delete-wallet-data": "Delete Wallet Data",
     "display-settings": "Display Settings",
@@ -127,6 +134,7 @@
       "none": "None"
     },
     "successfully-updated": "Successfully updated!",
+    "switched-back-to-browser-local-storage-for-the-wallet-data": "Switched back to \"Browser Local Storage\" for the wallet data. Use the button again if you want to save other settings.",
     "this-has-to-be-a-valid-authorization-header": "This has to be a valid Authorization header.",
     "this-has-to-be-a-valid-rpc": {
       "1": "This has to be a valid",
@@ -151,6 +159,7 @@
     "this-will-delete-all-stored-data-and-reset-app-settings-incl": "This will delete ALL stored data and reset app settings, including your wallet, address book and more",
     "use-if-the-api-requires-authentication": "Use if the API requires authentication",
     "wallet-settings": "Wallet Settings",
+    "webgl-support-not-available-set-pow-to-best": "WebGL support not available, set PoW to Best",
     "websocket-server": "WebSocket Server",
     "work-server": "Work Server"
   },
@@ -195,7 +204,8 @@
     "show-qr-code": "Show QR Code",
     "uncemented-blocks": "Uncemented Blocks",
     "unknown": "Unknown",
-    "view-details": "View Details"
+    "view-details": "View Details",
+    "yes": "Yes"
   },
   "representative-search": {
     "representative-list-results": "Representative List Results"

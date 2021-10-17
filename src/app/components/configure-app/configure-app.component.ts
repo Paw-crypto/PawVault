@@ -352,7 +352,7 @@ export class ConfigureAppComponent implements OnInit {
       } catch (err) {
         // pressing cancel, reset storage setting and interrupt
         this.selectedStorage = this.storageOptions[0].value;
-        this.notifications.sendInfo(`Switched back to "Browser Local Storage" for the wallet data. Use the button again if you want to save other settings.`, {length: 10000});
+        this.notifications.sendInfo(this.translocoService.translate('configure-app.switched-back-to-browser-local-storage-for-the-wallet-data'), {length: 10000});
         return;
       }
     }
@@ -372,17 +372,17 @@ export class ConfigureAppComponent implements OnInit {
     if (this.defaultRepresentative && this.defaultRepresentative.length) {
       const valid = this.util.account.isValidAccount(this.defaultRepresentative);
       if (!valid) {
-        return this.notifications.sendWarning(`Default representative is not a valid account`);
+        return this.notifications.sendWarning(this.translocoService.translate('configure-app.default-representative-is-not-a-valid-account'));
       }
     }
 
     if (this.appSettings.settings.powSource !== newPoW) {
       if (newPoW === 'clientWebGL' && !this.pow.hasWebGLSupport()) {
-        this.notifications.sendWarning(`WebGL support not available, set PoW to Best`);
+        this.notifications.sendWarning(this.translocoService.translate('configure-app.webgl-support-not-available-set-pow-to-best'));
         newPoW = 'best';
       }
       if (newPoW === 'clientCPU' && !this.pow.hasWorkerSupport()) {
-        this.notifications.sendWarning(`CPU Worker support not available, set PoW to Best`);
+        this.notifications.sendWarning(this.translocoService.translate('configure-app.cpu-worker-support-not-available-set-pow-to-best'));
         newPoW = 'best';
       }
       // reset multiplier when not using it to avoid user mistake
@@ -452,7 +452,7 @@ export class ConfigureAppComponent implements OnInit {
       if (this.serverAPI.startsWith('https://') || this.serverAPI.startsWith('http://')) {
         newSettings.serverAPI = this.serverAPI;
       } else {
-        return this.notifications.sendWarning(`Custom API Server has an invalid address.`);
+        return this.notifications.sendWarning(this.translocoService.translate('configure-app.custom-api-server-has-an-invalid-address'));
       }
     }
 
@@ -460,7 +460,7 @@ export class ConfigureAppComponent implements OnInit {
       if (this.serverWS.startsWith('wss://') || this.serverWS.startsWith('ws://')) {
         newSettings.serverWS = this.serverWS;
       } else {
-        return this.notifications.sendWarning(`Custom Update Server has an invalid address.`);
+        return this.notifications.sendWarning(this.translocoService.translate('configure-app.custom-update-server-has-an-invalid-address'));
       }
     }
 
@@ -537,7 +537,7 @@ export class ConfigureAppComponent implements OnInit {
       this.serverAPIUpdated = null;
       this.serverWS = custom.ws;
       this.serverAuth = custom.auth;
-      this.shouldRandom = custom.shouldRandom ? 'Yes' : 'No';
+      this.shouldRandom = custom.shouldRandom ? this.translocoService.translate('general.yes') : this.translocoService.translate('general.no');
     }
 
     // reset server stats until updated
@@ -592,7 +592,7 @@ export class ConfigureAppComponent implements OnInit {
   async clearAllData() {
     const UIkit = window['UIkit'];
     try {
-      await UIkit.modal.confirm('<p class="uk-alert uk-alert-danger"><br><span class="uk-flex"><span uk-icon="icon: warning; ratio: 3;" class="uk-align-center"></span></span><span style="font-size: 18px;">You are about to delete all data stored in Nault, <b>which includes all locally stored data about your currently configured wallet, all entries from your address and representative books, and any other cached data. All settings will be reset to default</b>.</span><br><br><b style="font-size: 18px;">Before continuing, make sure you have saved the Nano seed and/or mnemonic of your current wallet</b>.<br><br><span style="font-size: 18px;"><b>YOU WILL NOT BE ABLE TO RECOVER THE FUNDS</b><br>without a backup of your currently configured wallet.</span></p><br>');
+      await UIkit.modal.confirm('<p class="uk-alert uk-alert-danger"><br><span class="uk-flex"><span uk-icon="icon: warning; ratio: 3;" class="uk-align-center"></span></span><span style="font-size: 18px;">You are about to delete all data stored in Nault, which includes all locally stored data about your currently configured wallet, all entries from your address and representative books, and any other cached data. All settings will be reset to default.</span><br><br><b style="font-size: 18px;">Before continuing, make sure you have saved the Nano seed and/or mnemonic of your current wallet</b>.<br><br><span style="font-size: 18px;"><b>YOU WILL NOT BE ABLE TO RECOVER THE FUNDS without a backup of your currently configured wallet.</b></span></p><br>');
       this.walletService.resetWallet();
       this.walletService.removeWalletData();
 
@@ -604,7 +604,7 @@ export class ConfigureAppComponent implements OnInit {
 
       this.loadFromSettings();
 
-      this.notifications.sendSuccess(`Successfully deleted locally stored data and reset the settings!`);
+      this.notifications.sendSuccess(`configure-app.clear-all-data.successfully-deleted-locally-stored-data-and-reset-the`);
 
       // Get a new random API server or Nault will get stuck in offline mode
       this.updateServerSettings();
