@@ -65,6 +65,8 @@ export interface FullWallet {
   selectedAccount: WalletAccount|null;
   selectedAccount$: BehaviorSubject<WalletAccount|null>;
   locked: boolean;
+  locked$: BehaviorSubject<boolean|false>;
+  unlockModalRequested$: BehaviorSubject<boolean|false>;
   password: string;
   pendingBlocks: Block[];
   pendingBlocksUpdate$: BehaviorSubject<ReceivableBlockUpdate|null>;
@@ -114,6 +116,8 @@ export class WalletService {
     selectedAccount: null,
     selectedAccount$: new BehaviorSubject(null),
     locked: false,
+    locked$: new BehaviorSubject(false),
+    unlockModalRequested$: new BehaviorSubject(false),
     password: '',
     pendingBlocks: [],
     pendingBlocksUpdate$: new BehaviorSubject(null),
@@ -297,6 +301,7 @@ export class WalletService {
       this.wallet.seed = walletJson.seed;
       this.wallet.seedBytes = this.util.hex.toUint8(walletJson.seed);
       this.wallet.locked = true;
+      this.wallet.locked$.next(true);
     }
     if (walletType === 'ledger') {
       // Check ledger status?
@@ -390,6 +395,7 @@ export class WalletService {
     });
 
     this.wallet.locked = true;
+    this.wallet.locked$.next(true);
     this.wallet.password = '';
 
     this.saveWalletExport(); // Save so that a refresh gives you a locked wallet
@@ -414,6 +420,7 @@ export class WalletService {
       });
 
       this.wallet.locked = false;
+      this.wallet.locked$.next(false);
       this.wallet.password = password;
 
       this.notifications.removeNotification('pending-locked'); // If there is a notification to unlock, remove it
@@ -427,10 +434,6 @@ export class WalletService {
     } catch (err) {
       return false;
     }
-  }
-
-  walletIsLocked() {
-    return this.wallet.locked;
   }
 
   async createWalletFromSeed(seed: string) {
@@ -615,6 +618,7 @@ export class WalletService {
     this.wallet.type = 'seed';
     this.wallet.password = '';
     this.wallet.locked = false;
+    this.wallet.locked$.next(false);
     this.wallet.seed = '';
     this.wallet.seedBytes = null;
     this.wallet.accounts = [];
@@ -1100,5 +1104,46 @@ export class WalletService {
   informBalanceRefresh() {
     this.wallet.refresh$.next(true);
     this.wallet.refresh$.next(false);
+  }
+
+  requestWalletUnlock() {
+    this.wallet.unlockModalRequested$.next(true);
+
+    return new Promise(
+      (resolve, reject) => {
+        let subscriptionForUnlock;
+        let subscriptionForCancel;
+
+        const removeSubscriptions = () => {
+          if (subscriptionForUnlock != null) {
+            subscriptionForUnlock.unsubscribe();
+          }
+
+          if (subscriptionForCancel != null) {
+            subscriptionForCancel.unsubscribe();
+          }
+        };
+
+        subscriptionForUnlock =
+          this.wallet.locked$.subscribe(async isLocked => {
+            if (isLocked === false) {
+              removeSubscriptions();
+
+              const wasUnlocked = true;
+              resolve(wasUnlocked);
+            }
+          });
+
+        subscriptionForCancel =
+          this.wallet.unlockModalRequested$.subscribe(async wasRequested => {
+            if (wasRequested === false) {
+              removeSubscriptions();
+
+              const wasUnlocked = false;
+              resolve(wasUnlocked);
+            }
+          });
+      }
+    );
   }
 }
