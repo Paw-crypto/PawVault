@@ -228,7 +228,7 @@ export class RepresentativesComponent implements OnInit {
     this.recommendedRepsLoading = true;
     try {
       const scores = await this.ninja.recommended() as any[];
-      const totalSupply = new BigNumber(133248289);
+      const totalSupply = new BigNumber("340282366920938463463374607431768211455").shift(-27);
 
       const reps = scores.map(rep => {
         const nanoWeight = this.util.nano.rawToNano(rep.votingweight.toString() || 0);
@@ -236,7 +236,7 @@ export class RepresentativesComponent implements OnInit {
 
         // rep.weight = nanoWeight.toString(10);
         rep.weight = this.util.nano.rawToNano(nanoWeight);
-        rep.percent = percent.toFixed(3);
+        rep.percent = percent.toFixed(4);
 
         return rep;
       });
