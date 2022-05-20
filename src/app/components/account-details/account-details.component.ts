@@ -70,6 +70,10 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   dateStringToday = '';
   dateStringYesterday = '';
 
+  changePawnimalModal: any = null;
+  pawnimalIconNonce = -2;
+  settingPawnimalIcon = false;
+
   // Remote signing
   addressBookResults$ = new BehaviorSubject([]);
   showAddressBook = false;
@@ -153,6 +157,9 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     const mobileAccountMenuModal = UIkit.modal('#mobile-account-menu-modal');
     this.mobileAccountMenuModal = mobileAccountMenuModal;
 
+    const changePawnimalModal = UIkit.modal('#change-pawnimal-modal');
+    this.changePawnimalModal = changePawnimalModal;
+
     const mobileTransactionMenuModal = UIkit.modal('#mobile-transaction-menu-modal');
     this.mobileTransactionMenuModal = mobileTransactionMenuModal;
 
@@ -205,6 +212,7 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     this.walletAccount = null;
     this.account = {};
     this.qrCodeImage = null;
+    this.pawnimalIconNonce = -1;
   }
 
   clearRemoteVars() {
@@ -623,6 +631,56 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   copied() {
     this.notifications.removeNotification('success-copied');
     this.notifications.sendSuccess(`Successfully copied to clipboard!`, { identifier: 'success-copied' });
+  }
+
+  openChangePawnimalModal() {
+    if (this.util.nano.rawToNano(this.account.balance || 0).comparedTo(2) === -1) {
+      return this.notifications.sendWarning(`You need a balance of at least 2 PAW to change your pawnimal icon`);
+    }
+    if (this.wallet.walletIsLocked()) {
+      return this.notifications.sendWarning(`Wallet must be unlocked to change your pawnimal icon`);
+    }
+    this.changePawnimalModal.show();
+  }
+
+  nextPawnimalNonce() {
+    this.pawnimalIconNonce++;
+  }
+
+  previousPawnimalNonce() {
+    this.pawnimalIconNonce--;
+  }
+
+  async setPawnimalIcon() {
+    if (this.settingPawnimalIcon) {
+      return;
+    }
+    const walletAccount = this.wallet.wallet.accounts.find(a => a.id === this.accountID);
+    const destinationID = 'paw_3ns1ihdrdmtys65xsntgohdu78bu7heuzkb7hpcn179q6k9qi7rg336scbit';
+    const amount = this.util.nano.nanoToRaw(new BigNumber(1)).plus(this.pawnimalIconNonce);
+    this.settingPawnimalIcon = true;
+    const newHash = await this.nanoBlock.generateSend(walletAccount, destinationID, amount, this.wallet.isLedgerWallet());
+    this.settingPawnimalIcon = false;
+    if (newHash) {
+      // We give the server 5 seconds to process our transaction, then we refresh the image on screen
+      setTimeout(function() {
+        // Loop over all current images and add something random to the end
+        const randomUrlAddition = '&random=' + Math.random();
+        const images = document.getElementsByClassName('natricon');
+
+        for (let i = 0; i < images.length; i++) {
+          const pawnimalimg = images[i] as HTMLImageElement;
+          if (pawnimalimg.src.includes(walletAccount.id)) {
+            pawnimalimg.src = pawnimalimg.src + randomUrlAddition;
+          }
+        }
+      }, 5000);
+
+      this.notifications.sendSuccess('Pawnimal icon successfully changed.');
+      this.changePawnimalModal.hide();
+    } else {
+      this.notifications.sendError('Could not update Pawnimal icon. The transaction failed.');
+    }
   }
 
   // Remote signing methods
