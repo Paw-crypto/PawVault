@@ -60,7 +60,7 @@
 
         <div uk-grid>
 
-          <app-nano-identicon scale="12" [accountID]="accountID" [settingIdenticonsStyle]="settings.settings.identiconsStyle" class="nano-identicon" *ngIf="(settings.settings.identiconsStyle !== 'none')"></app-nano-identicon>
+          <app-nano-identicon scale="12" [accountID]="accountID"(click)="openChangePawnimalModal()"  [settingIdenticonsStyle]="settings.settings.identiconsStyle" class="nano-identicon" *ngIf="(settings.settings.identiconsStyle !== 'none')"></app-nano-identicon>
 
           <div class="uk-width-1-1 uk-width-expand@s">
 
@@ -743,6 +743,37 @@
         >
           <span class="icon icon-leave" uk-icon="icon: sign-out; ratio: 1.4;"></span>
           <span>Select a different account</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="change-pawnimal-modal" uk-modal>
+  <div class="uk-modal-dialog">
+    <div class="uk-modal-body">
+      <div class="uk-width-1-1">
+        <h3 class="menu-header">
+          Change Pawnimal
+        </h3>
+        <hr>
+        <div class="menu-option" (click)="previousPawnimalNonce()">
+          <span>Up</span>
+        </div>
+        <div>
+          <div class="uk-width-1-1 uk-margin-auto uk-margin-auto-vertical">
+            <div class="change-pawnimal-icon-container">
+              <app-nano-identicon scale="12" [nonce]="pawnimalIconNonce" [accountID]="accountID" [settingIdenticonsStyle]="settings.settings.identiconsStyle" class="nano-identicon" *ngIf="(settings.settings.identiconsStyle !== 'none')"></app-nano-identicon>
+            </div>
+          </div>
+        </div>
+        <div class="menu-option" (click)="nextPawnimalNonce()">
+          <span>Down</span>
+        </div>
+        <div class="menu-option" (click)="setPawnimalIcon()">
+          <span *ngIf="settingPawnimalIcon" class="spinner" uk-spinner="ratio: 0.5;"></span>
+          <span *ngIf="settingPawnimalIcon"> &nbsp; </span>
+          <span>I want this one</span>
         </div>
       </div>
     </div>

@@ -11,9 +11,11 @@ export class NanoIdenticonComponent implements OnChanges, AfterViewInit {
   @Input() accountID: string;
   @Input() scale: number;
   @Input() settingIdenticonsStyle: string;
+  @Input() nonce: number;
 
   renderedIdenticon = '';
   imageLoadErrorOccurred = false;
+  nonceUrlAddition = '';
 
   constructor() { }
 
@@ -28,6 +30,10 @@ export class NanoIdenticonComponent implements OnChanges, AfterViewInit {
   }
 
   renderNanoidenticon() {
+    if (this.nonce !== undefined) {
+      this.nonceUrlAddition = '&nonce=' + this.nonce;
+    }
+
     if (
           (this.canvasContainer == null)
         || (this.settingIdenticonsStyle !== 'nanoidenticons')
