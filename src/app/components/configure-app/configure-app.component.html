@@ -142,7 +142,7 @@
                   <div class="uk-form-controls">
                       <input [(ngModel)]="customWorkServer" class="uk-input uk-margin-small-bottom" type="text" placeholder="http://my-work-server:port">
                       <span class="uk-text-meta">
-                        This has to be a valid <a href="https://docs.wallet.paw.digital/2021/02/13/custom-work-server.html" target="_blank" rel="noopener noreferrer">Nano Work Server</a> endpoint or an API compliant with it.
+                        This has to be a valid <a href="https://docs.wallet.paw.digital/2021/02/13/custom-work-server.html" target="_blank" rel="noopener noreferrer">Paw Work Server</a> endpoint or an API compliant with it.
                       </span>
                   </div>
               </div>
@@ -253,7 +253,7 @@
             <div class="uk-form-horizontal">
 
               <div class="uk-margin">
-                <label class="uk-form-label" for="form-horizontal-select">Server Configuration <span uk-icon="icon: info;" uk-tooltip title="Change which server is used to communicate with the Nano network"></span></label>
+                <label class="uk-form-label" for="form-horizontal-select">Server Configuration <span uk-icon="icon: info;" uk-tooltip title="Change which server is used to communicate with the Paw network"></span></label>
                 <div class="uk-form-controls">
                   <select class="uk-select" [(ngModel)]="selectedServer" (change)="serverConfigChange(selectedServer)" id="form-horizontal-select">
                     <option *ngFor="let server of serverOptions" [value]="server.value">{{ server.name }}</option>
@@ -267,7 +267,7 @@
           <div class="uk-width-1-1" *ngIf="showServerValues()">
             <div class="uk-form-horizontal">
               <div class="">
-                <label class="uk-form-label uk-text-right">API Server <span uk-icon="icon: info;" uk-tooltip title="This server is used to load, cache, and enhance results from the Nano node"></span></label>
+                <label class="uk-form-label uk-text-right">API Server <span uk-icon="icon: info;" uk-tooltip title="This server is used to load, cache, and enhance results from the Paw node"></span></label>
                 <div class="uk-form-controls">
 
                   <div class="uk-inline uk-width-1-1" *ngIf="!showServerConfigs()">
@@ -276,7 +276,7 @@
                   <div class="uk-inline uk-width-1-1" *ngIf="showServerConfigs()">
                     <input [(ngModel)]="serverAPI" class="uk-input uk-margin-small-bottom" type="text" placeholder="https://domain.com/path">
                     <span class="uk-text-meta">
-                      This has to be a valid <a href="https://docs.nano.org/commands/rpc-protocol/" target="_blank" rel="noopener noreferrer">Nano RPC endpoint</a> or an API compliant with it.
+                      This has to be a valid <a href="https://docs.nano.org/commands/rpc-protocol/" target="_blank" rel="noopener noreferrer">Paw RPC endpoint</a> or an API compliant with it.
                     </span>
                   </div>
                 </div>
@@ -296,7 +296,7 @@
                   <div class="uk-inline uk-width-1-1" *ngIf="showServerConfigs()">
                     <input [(ngModel)]="serverWS" class="uk-input uk-margin-small-bottom" id="form-horizontal-text2" type="text" placeholder="wss://domain.com/path">
                     <span class="uk-text-meta">
-                      This has to be a <a href="https://docs.nano.org/integration-guides/websockets/#configuration" target="_blank" rel="noopener noreferrer">Nano Node Websocket</a> or a WebSocket API compliant with it.<br>
+                      This has to be a <a href="https://docs.nano.org/integration-guides/websockets/#configuration" target="_blank" rel="noopener noreferrer">Paw Node Websocket</a> or a WebSocket API compliant with it.<br>
                       <i>Note: Since this server only notifies about new transactions, most of the wallet functions fine without it.</i>
                     </span>
                   </div>
