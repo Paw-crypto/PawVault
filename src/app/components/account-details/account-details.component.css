@@ -148,17 +148,17 @@
     margin-left: 4px;
 }
 
-.representative-details {
+.representative-details, .staking-details {
     position: relative;
 }
 
-.representative-details, .balance-details {
+.representative-details, .balance-details, .staking-details {
     min-height: 85px;
 }
 
 @media (max-width: 1199px) {
     /* horizontal separator between rep details and balances */
-    .representative-details::after {
+    .representative-details::after, .staking-details::after {
         content: '';
         display: block;
         position: absolute;

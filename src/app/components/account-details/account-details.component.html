@@ -130,7 +130,7 @@
 
         <div uk-grid>
 
-          <div class="representative-details uk-width-1-1@s uk-width-1-2@l">
+          <div class="representative-details uk-width-1-1@s uk-width-1-3@l">
 
             <div class="details-header">{{ 'general.representative' | transloco }}</div>
 
@@ -166,7 +166,29 @@
 
           </div>
 
-          <div class="balance-details uk-width-1-1@s uk-width-1-2@l">
+          <div class="staking-details uk-width-1-1@s uk-width-1-3@l">
+
+            <div class="details-header">Linked staking accounts</div>
+
+            <div *ngIf="!loadingStaking else stakeLoading">
+              <div *ngIf="!stakingAccounts.length">No linked staking accounts found.</div>
+              <div *ngFor="let stakingAccount of stakingAccounts" [title]="stakingAccount" class="nano-address-monospace">
+                <a [routerLink]="'/account/' + stakingAccount" class="account-container uk-text-truncate">
+                  <div class="nano-address-clickable nano-address-monospace uk-text-truncate">
+                    <app-nano-account-id [accountID]="stakingAccount" middle="off"></app-nano-account-id>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <ng-template #stakeLoading>
+              <div class="uk-margin-small-top">
+                <div uk-spinner="ratio: 0.5;" style="vertical-align: 2px;"></div>
+              </div>
+            </ng-template>
+
+          </div>
+
+          <div class="balance-details uk-width-1-1@s uk-width-1-3@l">
             <div class="details-header">{{ 'general.balance' | transloco }}</div>
             <ng-container *ngIf="!loadingAccountDetails else balanceLoading">
               <div>
