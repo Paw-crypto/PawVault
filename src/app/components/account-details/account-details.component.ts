@@ -634,6 +634,9 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   }
 
   openChangePawnimalModal() {
+    if (!this.walletAccount) {
+      return;
+    }
     if (this.util.nano.rawToNano(this.account.balance || 0).comparedTo(2) === -1) {
       return this.notifications.sendWarning(`You need a balance of at least 2 PAW to change your pawnimal icon`);
     }
