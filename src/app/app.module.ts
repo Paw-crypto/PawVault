@@ -32,6 +32,7 @@ import {NanoBlockService} from './services/nano-block.service';
 import { AccountDetailsComponent } from './components/account-details/account-details.component';
 import { TransactionDetailsComponent } from './components/transaction-details/transaction-details.component';
 import {PriceService} from './services/price.service';
+import {StakingService} from './services/staking.service';
 import { FiatPipe } from './pipes/fiat.pipe';
 import { AmountSplitPipe } from './pipes/amount-split.pipe';
 import { ImportWalletComponent } from './components/import-wallet/import-wallet.component';
@@ -137,6 +138,7 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
     WebsocketService,
     NanoBlockService,
     PriceService,
+    StakingService,
     PowService,
     RepresentativeService,
     NodeService,
