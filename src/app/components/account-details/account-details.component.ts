@@ -838,15 +838,19 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     this.notifications.sendSuccess(`Successfully copied to clipboard!`, { identifier: 'success-copied' });
   }
 
-  openChangePawnimalModal() {
+  async openChangePawnimalModal() {
     if (!this.walletAccount) {
       return;
     }
     if (this.util.nano.rawToNano(this.account.balance || 0).comparedTo(2) === -1) {
       return this.notifications.sendWarning(`You need a balance of at least 2 PAW to change your pawnimal icon`);
     }
-    if (this.wallet.walletIsLocked()) {
-      return this.notifications.sendWarning(`Wallet must be unlocked to change your pawnimal icon`);
+    if (this.wallet.isLocked()) {
+      const wasUnlocked = await this.wallet.requestWalletUnlock();
+
+      if (wasUnlocked === false) {
+        return;
+      }
     }
     this.changePawnimalModal.show();
   }
