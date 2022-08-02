@@ -262,3 +262,23 @@
 .change-pawnimal-icon-container {
   margin: 30%;
 }
+
+.incoming-label > .text-full > .amount-fractional,
+.incoming-label > .text-full > .amount-currency-name {
+    display: inline-block;
+}
+
+.incoming-label > .text-full > .amount-currency-name {
+    margin-left: 4px;
+}
+
+
+.account-amounts-primary-confirmed > .amount-fractional,
+.account-amounts-primary-confirmed > .amount-currency-name {
+    font-size: 16px;
+}
+
+.account-amounts-primary-confirmed > .amount-currency-name {
+    margin-left: 4px;
+}
+
