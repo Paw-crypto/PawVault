@@ -280,12 +280,12 @@
           <ng-template #notUpdatingTxList>
             <a
               class="icon-transactions-refresh"
-              [class.disabled]="!statsRefreshEnabled"
-              [class.uk-text-muted]="!statsRefreshEnabled"
+              [class.disabled]="!manualRefreshAllowed"
+              [class.uk-text-muted]="!manualRefreshAllowed"
               uk-icon="icon: refresh;"
               [title]="'general.reload' | transloco"
               uk-tooltip
-              (click)="loadAccountDetails(true)"
+              (click)="onRefreshButtonClick()"
             ></a>
           </ng-template>
         </li>
@@ -407,7 +407,7 @@
             </ng-template>
           </ng-template>
           <td class="amount-column uk-text-middle uk-text-muted" [title]="('Incoming Transaction') + ( (pending.amountRaw && (pending.amountRaw > 0) ) ? ( ', +' + ( pending.amountRaw.toString(10) ) + ' raw' ) : '' )">
-            <span class="uk-text-small">{{ 'general.actions.ready-to-receive' | transloco }}</span><br>
+            <span class="uk-text-small">{{ 'general.blockactions.ready-to-receive' | transloco }}</span><br>
             <span class="amount-integer">{{ pending.amount | rai: 'nano,true' | amountsplit: 0 | number }}</span>
             <span class="amount-fractional">{{ pending.amount | rai: 'nano,true' | amountsplit: 1 }}</span>
             <span class="currency-name">PAW</span>
@@ -479,7 +479,7 @@
                 [title]="( (history.confirmed === false) ? ('account-details.this-change-has-not-yet-been-confirmed-by-the-network' | transloco) : '' )"
                 uk-tooltip
               >
-                {{ 'general.actions.rep-change' | transloco }}
+                {{ 'general.blockactions.rep-change' | transloco }}
                 <span class="icon-unconfirmed" uk-icon="icon: clock;" *ngIf="(history.confirmed === false)"></span>
               </span>
             </span>
@@ -490,7 +490,7 @@
                 [title]="( (history.confirmed === false) ? ('account-details.this-transaction-has-not-yet-been-confirmed-by-the-network' | transloco) : '' )"
                 uk-tooltip
               >
-                  {{ 'general.actions.received' | transloco }}
+                  {{ 'general.blockactions.received' | transloco }}
                   <span class="icon-unconfirmed" uk-icon="icon: clock;" *ngIf="(history.confirmed === false)"></span>
                 </span><br>
               </ng-container>
@@ -500,7 +500,7 @@
                   [title]="( (history.confirmed === false) ? ('account-details.this-transaction-has-not-yet-been-confirmed-by-the-network' | transloco) : '' )"
                   uk-tooltip
                 >
-                  {{ 'general.actions.sent' | transloco }}
+                  {{ 'general.blockactions.sent' | transloco }}
                   <span class="icon-unconfirmed" uk-icon="icon: clock;" *ngIf="(history.confirmed === false)"></span>
                 </span><br>
               </ng-container>
@@ -577,7 +577,7 @@
     </div>
     <div class="uk-modal-body modal-block-body">
       <ol>
-        <li>Generate a Nano block below. No wallet login needed.</li>
+        <li>Generate a nano block below. No wallet import needed.</li>
         <li><a routerLink="/qr-scan" routerLinkActive="active" class="uk-modal-close">Scan</a> the unsigned QR with an offline Biome, or copy the "Unsigned Block" to <a routerLink="/remote-signing" routerLinkActive="active" class="uk-modal-close">Step 2</a>.</li>
       </ol>
 

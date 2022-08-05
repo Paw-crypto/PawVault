@@ -39,6 +39,13 @@ export interface Block {
   source: string;
 }
 
+export interface ReceivableBlockUpdate {
+  account: string;
+  sourceHash: string;
+  destinationHash: string|null;
+  hasBeenReceived: boolean;
+}
+
 export interface FullWallet {
   type: WalletType;
   seedBytes: any;
@@ -58,9 +65,11 @@ export interface FullWallet {
   selectedAccount: WalletAccount|null;
   selectedAccount$: BehaviorSubject<WalletAccount|null>;
   locked: boolean;
+  locked$: BehaviorSubject<boolean|false>;
+  unlockModalRequested$: BehaviorSubject<boolean|false>;
   password: string;
   pendingBlocks: Block[];
-  pendingBlocksUpdate$: BehaviorSubject<boolean|false>;
+  pendingBlocksUpdate$: BehaviorSubject<ReceivableBlockUpdate|null>;
   newWallet$: BehaviorSubject<boolean|false>;
   refresh$: BehaviorSubject<boolean|false>;
 }
@@ -107,9 +116,11 @@ export class WalletService {
     selectedAccount: null,
     selectedAccount$: new BehaviorSubject(null),
     locked: false,
+    locked$: new BehaviorSubject(false),
+    unlockModalRequested$: new BehaviorSubject(false),
     password: '',
     pendingBlocks: [],
-    pendingBlocksUpdate$: new BehaviorSubject(false),
+    pendingBlocksUpdate$: new BehaviorSubject(null),
     newWallet$: new BehaviorSubject(false),
     refresh$: new BehaviorSubject(false),
   };
@@ -190,17 +201,17 @@ export class WalletService {
             // Incoming transaction
             if (this.addressBook.getTransactionTrackingById(addressLink)) {
               this.notifications.sendInfo(`Tracked address ${accountHrefLink} can now receive ${trackedAmount} PAW`, { length: 10000 });
-              console.log(`Tracked incoming block to: ${address} - ${trackedAmount} Nano`);
+              console.log(`Tracked incoming block to: ${address} - Ӿ${trackedAmount}`);
             }
             // Outgoing transaction
             if (this.addressBook.getTransactionTrackingById(address)) {
               this.notifications.sendInfo(`Tracked address ${accountHref} sent ${trackedAmount} PAW`, { length: 10000 });
-              console.log(`Tracked send block from: ${address} - ${trackedAmount} Nano`);
+              console.log(`Tracked send block from: ${address} - Ӿ${trackedAmount}`);
             }
           } else if (transaction.block.subtype === 'receive' && this.addressBook.getTransactionTrackingById(address)) {
             // Receive transaction
             this.notifications.sendInfo(`Tracked address ${accountHref} received incoming ${trackedAmount} PAW`, { length: 10000 });
-            console.log(`Tracked receive block to: ${address} - ${trackedAmount} Nano`);
+            console.log(`Tracked receive block to: ${address} - Ӿ${trackedAmount}`);
           } else if (transaction.block.subtype === 'change' && this.addressBook.getTransactionTrackingById(address)) {
             // Change transaction
             this.notifications.sendInfo(`Tracked address ${accountHref} changed its representative to ${rep}`, { length: 10000 });
@@ -290,6 +301,7 @@ export class WalletService {
       this.wallet.seed = walletJson.seed;
       this.wallet.seedBytes = this.util.hex.toUint8(walletJson.seed);
       this.wallet.locked = true;
+      this.wallet.locked$.next(true);
     }
     if (walletType === 'ledger') {
       // Check ledger status?
@@ -383,6 +395,7 @@ export class WalletService {
     });
 
     this.wallet.locked = true;
+    this.wallet.locked$.next(true);
     this.wallet.password = '';
 
     this.saveWalletExport(); // Save so that a refresh gives you a locked wallet
@@ -407,6 +420,7 @@ export class WalletService {
       });
 
       this.wallet.locked = false;
+      this.wallet.locked$.next(false);
       this.wallet.password = password;
 
       this.notifications.removeNotification('pending-locked'); // If there is a notification to unlock, remove it
@@ -420,10 +434,6 @@ export class WalletService {
     } catch (err) {
       return false;
     }
-  }
-
-  walletIsLocked() {
-    return this.wallet.locked;
   }
 
   async createWalletFromSeed(seed: string) {
@@ -608,6 +618,7 @@ export class WalletService {
     this.wallet.type = 'seed';
     this.wallet.password = '';
     this.wallet.locked = false;
+    this.wallet.locked$.next(false);
     this.wallet.seed = '';
     this.wallet.seedBytes = null;
     this.wallet.accounts = [];
@@ -945,8 +956,13 @@ export class WalletService {
     if (existingHash) return false; // Already added
 
     this.wallet.pendingBlocks.push({ account: accountID, hash: blockHash, amount: amount, source: source });
-    this.wallet.pendingBlocksUpdate$.next(true);
-    this.wallet.pendingBlocksUpdate$.next(false);
+    this.wallet.pendingBlocksUpdate$.next({
+      account: accountID,
+      sourceHash: blockHash,
+      destinationHash: null,
+      hasBeenReceived: false,
+    });
+    this.wallet.pendingBlocksUpdate$.next(null);
     return true;
   }
 
@@ -1000,8 +1016,13 @@ export class WalletService {
       // list also updated with reloadBalances but not if called too fast
       this.removePendingBlock(nextBlock.hash);
       await this.reloadBalances();
-      this.wallet.pendingBlocksUpdate$.next(true);
-      this.wallet.pendingBlocksUpdate$.next(false);
+      this.wallet.pendingBlocksUpdate$.next({
+        account: nextBlock.account,
+        sourceHash: nextBlock.hash,
+        destinationHash: newHash,
+        hasBeenReceived: true,
+      });
+      this.wallet.pendingBlocksUpdate$.next(null);
     } else {
       if (this.isLedgerWallet()) {
         this.processingPending = false;
@@ -1083,5 +1104,46 @@ export class WalletService {
   informBalanceRefresh() {
     this.wallet.refresh$.next(true);
     this.wallet.refresh$.next(false);
+  }
+
+  requestWalletUnlock() {
+    this.wallet.unlockModalRequested$.next(true);
+
+    return new Promise(
+      (resolve, reject) => {
+        let subscriptionForUnlock;
+        let subscriptionForCancel;
+
+        const removeSubscriptions = () => {
+          if (subscriptionForUnlock != null) {
+            subscriptionForUnlock.unsubscribe();
+          }
+
+          if (subscriptionForCancel != null) {
+            subscriptionForCancel.unsubscribe();
+          }
+        };
+
+        subscriptionForUnlock =
+          this.wallet.locked$.subscribe(async isLocked => {
+            if (isLocked === false) {
+              removeSubscriptions();
+
+              const wasUnlocked = true;
+              resolve(wasUnlocked);
+            }
+          });
+
+        subscriptionForCancel =
+          this.wallet.unlockModalRequested$.subscribe(async wasRequested => {
+            if (wasRequested === false) {
+              removeSubscriptions();
+
+              const wasUnlocked = false;
+              resolve(wasUnlocked);
+            }
+          });
+      }
+    );
   }
 }

@@ -453,8 +453,12 @@ export class SignComponent implements OnInit {
 
     // using internal wallet
     if (this.signTypeSelected === this.signTypes[0] && walletAccount) {
-      if (this.walletService.walletIsLocked()) {
-        return this.notificationService.sendWarning('Wallet must be unlocked for signing with it');
+      if (this.walletService.isLocked()) {
+        const wasUnlocked = await this.walletService.requestWalletUnlock();
+
+        if (wasUnlocked === false) {
+          return;
+        }
       }
     } else if (this.signTypeSelected === this.signTypes[0]) {
       return this.notificationService.sendWarning('Could not find a matching wallet account to sign with. Make sure it\'s added under your accounts');
@@ -1061,7 +1065,7 @@ export class SignComponent implements OnInit {
 
   multiSign() {
     const result = this.musigService.runMultiSign(this.privateKey, this.blockHash, this.inputMultisigData);
-    // used for validation when the final Nano block is created
+    // used for validation when the final nano block is created
     if (result && result.multisig !== '') {
       this.multisigAccount = result.multisig;
     }

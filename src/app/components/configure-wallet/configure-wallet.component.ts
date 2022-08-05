@@ -58,15 +58,6 @@ export class ConfigureWalletComponent implements OnInit {
   indexMax = INDEX_MAX;
 
   selectedImportOption = 'seed';
-  importOptions = [
-    { name: 'Paw Seed', value: 'seed' },
-    { name: 'Paw Mnemonic Phrase', value: 'mnemonic' },
-    { name: 'BIP39 Mnemonic Phrase', value: 'bip39-mnemonic' },
-    { name: 'PawVault Wallet File', value: 'file' },
-    { name: 'Ledger Nano S / Nano X', value: 'ledger' },
-    { name: 'Private Key', value: 'privateKey' },
-    { name: 'Expanded Private Key', value: 'expandedKey' },
-  ];
 
   ledgerStatus = LedgerStatus;
   ledger = this.ledgerService.ledger;
@@ -353,7 +344,7 @@ export class ConfigureWalletComponent implements OnInit {
     this.walletService.saveWalletExport();
     this.walletService.informNewWallet();
 
-    this.notifications.sendSuccess(`Successfully created new wallet! Do not lose the seed/mnemonic!`);
+    this.notifications.sendSuccess(`Successfully created new wallet! Do not lose the secret recovery seed/mnemonic!`);
   }
 
   setPanel(panel) {

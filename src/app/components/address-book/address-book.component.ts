@@ -11,6 +11,7 @@ import {BigNumber} from 'bignumber.js';
 import {ApiService} from '../../services/api.service';
 import {PriceService} from '../../services/price.service';
 import {AppSettingsService} from '../../services/app-settings.service';
+import {TranslocoService} from '@ngneat/transloco';
 
 export interface BalanceAccount {
   balance: BigNumber;
@@ -65,7 +66,8 @@ export class AddressBookComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private api: ApiService,
     private price: PriceService,
-    public appSettings: AppSettingsService) { }
+    public appSettings: AppSettingsService,
+    private translocoService: TranslocoService) { }
 
   async ngOnInit() {
     this.addressBookService.loadAddressBook();
@@ -127,7 +129,7 @@ export class AddressBookComponent implements OnInit, AfterViewInit, OnDestroy {
       const datas = result.map(el => el.dataset.account);
 
       this.addressBookService.setAddressBookOrder(datas);
-      this.notificationService.sendSuccess(`Updated address book order`);
+      this.notificationService.sendSuccess(this.translocoService.translate('address-book.updated-address-book-order'));
     });
   }
 
@@ -264,18 +266,19 @@ export class AddressBookComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async saveNewAddress() {
     if (!this.newAddressAccount || !this.newAddressName) {
-      return this.notificationService.sendError(`Account and name are required`);
+      return this.notificationService.sendError(this.translocoService.translate('address-book.account-and-name-are-required'));
     }
 
     if (this.newTrackBalance && this.numberOfTrackedBalance >= 20) {
-      return this.notificationService.sendError(`You can only track the balance of maximum 20 addresses`);
+      return this.notificationService.sendError(this.translocoService.translate('address-book.you-can-only-track-the-balance-of-maximum-20-addresses'));
     }
 
     // Trim and remove duplicate spaces
     this.newAddressName = this.newAddressName.trim().replace(/ +/g, ' ');
 
-    if ( /^Account #\d+$/g.test(this.newAddressName) === true ) {
-      return this.notificationService.sendError(`This name is reserved for wallet accounts without a label`);
+    const regexp = new RegExp('^(Account|' + this.translocoService.translate('general.account') + ') #\\d+$', 'g');
+    if ( regexp.test(this.newAddressName) === true ) {
+      return this.notificationService.sendError(this.translocoService.translate('address-book.this-name-is-reserved-for-wallet-accounts-without-a-label'));
     }
 
     // Remove spaces and convert to nano prefix
@@ -283,12 +286,16 @@ export class AddressBookComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // If the name has been changed, make sure no other entries are using that name
     if ( (this.newAddressName !== this.previousAddressName) && this.addressBookService.nameExists(this.newAddressName) ) {
-      return this.notificationService.sendError(`This name is already in use! Please use a unique name`);
+      return this.notificationService.sendError(this.translocoService.translate('address-book.this-name-is-already-in-use-please-use-a-unique-name'));
     }
 
     // Make sure the address is valid
     const valid = this.util.account.isValidAccount(this.newAddressAccount);
-    if (!valid) return this.notificationService.sendWarning(`Account ID is not a valid account`);
+    if (!valid) {
+      return this.notificationService.sendWarning(
+        this.translocoService.translate('address-book.account-id-is-not-a-valid-account')
+      );
+    }
 
     // Store old setting
     const wasTransactionTracked = this.addressBookService.getTransactionTrackingById(this.newAddressAccount);
@@ -296,7 +303,7 @@ export class AddressBookComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       await this.addressBookService.saveAddress(this.newAddressAccount,
         this.newAddressName, this.newTrackBalance, this.newTrackTransactions);
-      this.notificationService.sendSuccess(`Address book entry saved successfully!`);
+      this.notificationService.sendSuccess(this.translocoService.translate('address-book.address-book-entry-saved-successfully'));
       // If this is one of our accounts, set its name and let it propagate through the app
       const walletAccount = this.walletService.wallet.accounts.find(a => a.id === this.newAddressAccount);
       if (walletAccount) {
@@ -314,7 +321,7 @@ export class AddressBookComponent implements OnInit, AfterViewInit, OnDestroy {
       this.updateTrackedBalances();
       this.cancelNewAddress();
     } catch (err) {
-      this.notificationService.sendError(`Unable to save entry: ${err.message}`);
+      this.notificationService.sendError(this.translocoService.translate('address-book.unable-to-save-entry', { message: err.message }));
     }
   }
 
@@ -326,17 +333,17 @@ export class AddressBookComponent implements OnInit, AfterViewInit, OnDestroy {
 
   copied() {
     this.notificationService.removeNotification('success-copied');
-    this.notificationService.sendSuccess(`Account address copied to clipboard!`, { identifier: 'success-copied' });
+    this.notificationService.sendSuccess(this.translocoService.translate('address-book.account-address-copied-to-clipboard'), { identifier: 'success-copied' });
   }
 
   async deleteAddress(account) {
     try {
       this.addressBookService.deleteAddress(account);
-      this.notificationService.sendSuccess(`Successfully deleted address book entry`);
+      this.notificationService.sendSuccess(this.translocoService.translate('address-book.successfully-deleted-address-book-entry'));
       this.walletService.untrackAddress(account);
       this.updateTrackedBalances();
     } catch (err) {
-      this.notificationService.sendError(`Unable to delete entry: ${err.message}`);
+      this.notificationService.sendError(this.translocoService.translate('address-book.unable-to-delete-entry', { message: err.message }));
     }
   }
 
@@ -382,7 +389,7 @@ export class AddressBookComponent implements OnInit, AfterViewInit, OnDestroy {
     const exportData = this.addressBookService.addressBook;
     this.triggerFileDownload(fileName, exportData);
 
-    this.notificationService.sendSuccess(`Address book export downloaded!`);
+    this.notificationService.sendSuccess(this.translocoService.translate('address-book.address-book-export-downloaded'));
   }
 
   importFromFile(files) {
@@ -397,13 +404,13 @@ export class AddressBookComponent implements OnInit, AfterViewInit, OnDestroy {
       try {
         const importData = JSON.parse(fileData);
         if (!importData.length || !importData[0].account) {
-          return this.notificationService.sendError(`Bad import data, make sure you selected a Biome Address Book export`);
+          return this.notificationService.sendError(this.translocoService.translate('address-book.bad-import-data-make-sure-you-selected-a-nault-address-book'));
         }
 
         const encoded = btoa(this.toBinary(JSON.stringify(importData)));
         this.router.navigate(['import-address-book'], { fragment: encoded });
       } catch (err) {
-        this.notificationService.sendError(`Unable to parse import data, make sure you selected the right file!`);
+        this.notificationService.sendError(this.translocoService.translate('address-book.unable-to-parse-import-data-make-sure-you-selected-the-right'));
       }
     };
 

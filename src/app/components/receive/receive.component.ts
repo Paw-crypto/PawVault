@@ -85,7 +85,11 @@ export class ReceiveComponent implements OnInit, OnDestroy {
       this.selAccountInit = true;
     });
 
-    this.walletService.wallet.pendingBlocksUpdate$.subscribe(async acc => {
+    this.walletService.wallet.pendingBlocksUpdate$.subscribe(async receivableBlockUpdate => {
+      if (receivableBlockUpdate === null) {
+        return;
+      }
+
       this.updatePendingBlocks();
     });
 
@@ -307,8 +311,12 @@ export class ReceiveComponent implements OnInit, OnDestroy {
       throw new Error(`Unable to find receiving account in wallet`);
     }
 
-    if (this.walletService.walletIsLocked()) {
-      return this.notificationService.sendWarning(`Wallet must be unlocked`);
+    if (this.walletService.isLocked()) {
+      const wasUnlocked = await this.walletService.requestWalletUnlock();
+
+      if (wasUnlocked === false) {
+        return;
+      }
     }
     receivableBlock.loading = true;
 

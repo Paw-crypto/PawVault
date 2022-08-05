@@ -302,7 +302,7 @@ function isValidAccount(account: string): boolean {
   return nanocurrency.checkAddress(account.replace('paw_', 'nano_'));
 }
 
-// Check if a string is a numeric and larger than 0 but less than Nano supply
+// Check if a string is a numeric and larger than 0 but less than nano supply
 function isValidNanoAmount(val: string) {
   // numerics and last character is not a dot and number of dots is 0 or 1
   const isnum = /^-?\d*\.?\d*$/.test(val);
@@ -325,7 +325,7 @@ function isValidAmount(val: string) {
 function getAccountPublicKey(account) {
   console.log(account);
   if (!isValidAccount(account)) {
-    throw new Error(`Invalid Nano Account`);
+    throw new Error(`Invalid nano account`);
   }
   const account_crop = account.substring(4, 64);
   const isValid = /^[13456789abcdefghijkmnopqrstuwxyz]+$/.test(account_crop);
