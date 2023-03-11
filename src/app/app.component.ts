@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, OnInit, ViewChild, Renderer2} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild, Renderer2, SecurityContext, ViewChildren, QueryList } from '@angular/core';
 import {WalletService} from './services/wallet.service';
 import {AddressBookService} from './services/address-book.service';
 import {AppSettingsService} from './services/app-settings.service';
@@ -7,7 +7,7 @@ import {PriceService} from './services/price.service';
 import {UtilService} from './services/util.service';
 import {NotificationService} from './services/notification.service';
 import {WorkPoolService} from './services/work-pool.service';
-import {Router} from '@angular/router';
+import {Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import {SwUpdate} from '@angular/service-worker';
 import {RepresentativeService} from './services/representative.service';
 import {NodeService} from './services/node.service';
@@ -15,7 +15,7 @@ import { DesktopService, LedgerService } from './services';
 import { environment } from 'environments/environment';
 import { DeeplinkService } from './services/deeplink.service';
 import { TranslocoService } from '@ngneat/transloco';
-
+import { AppSelectorService } from './services/app-selector.service';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +41,9 @@ export class AppComponent implements OnInit {
     private ledger: LedgerService,
     private renderer: Renderer2,
     private deeplinkService: DeeplinkService,
-    private translate: TranslocoService) {
+    private translate: TranslocoService,
+	private activatedRoute: ActivatedRoute,
+	public appSelector: AppSelectorService) {
       router.events.subscribe(() => {
         this.closeNav();
       });
@@ -49,6 +51,7 @@ export class AppComponent implements OnInit {
 
   @ViewChild('selectButton') selectButton: ElementRef;
   @ViewChild('accountsDropdown') accountsDropdown: ElementRef;
+  @ViewChildren('appFrame') appFrames: QueryList<ElementRef<HTMLIFrameElement>>;
 
   wallet = this.walletService.wallet;
   node = this.nodeService.node;
@@ -65,7 +68,7 @@ export class AppComponent implements OnInit {
   searchData = '';
   isConfigured = this.walletService.isConfigured;
   donationAccount = environment.donationAddress;
-
+  
   @HostListener('window:resize', ['$event']) onResize (e) {
     this.onWindowResize(e.target);
   }
@@ -78,8 +81,47 @@ export class AppComponent implements OnInit {
         this.showAccountsDropdown = false;
     }
   }
-
+  closeApp(app: any) {
+	this.appFrames.forEach(appFrame => {
+		 if (appFrame.nativeElement.id == app.id) {
+			appFrame.nativeElement.removeAttribute('src');
+			app.is_loaded = false;
+		 }
+	});
+  }
+  formatAppUrl(url: string) {
+	  if(url.indexOf('?') !== -1)
+		  return url + '&framed';
+	  
+	return url + '?framed';
+  }
   async ngOnInit() {
+	this.appSelector.retrieveAppsFromApi();
+	this.router.events.subscribe(event => {
+	  if (event instanceof NavigationEnd) {
+		// Get the app ID from the URL
+		const split = this.router.routerState.snapshot.url.split('/');
+		const appId = (split.length > 2) ? split[2] : 'unselected';
+
+		// Set the visible property of the app with the matching ID to true, and set all other apps to false
+		this.appSelector.getSelectedApps().forEach(app => {
+		  app.visible = app.id == appId;
+		});
+		
+		// Set the src attribute of the app frame with the matching ID
+		if(typeof(this.appFrames) != 'undefined')
+		{
+			this.appFrames.forEach(appFrame => {
+			  if (appFrame.nativeElement.id == appId) {
+				if (appFrame.nativeElement.src == '') {
+					appFrame.nativeElement.src = this.formatAppUrl(this.appSelector.getSelectedApps().find(app => app.id == appId).url);
+					this.appSelector.getSelectedApps().find(app => app.id == appId).is_loaded = true;
+				}
+			  }
+			});
+		}
+	  }
+	});
     this.onWindowResize(window);
     this.settings.loadAppSettings();
 

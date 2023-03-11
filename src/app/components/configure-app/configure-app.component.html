@@ -201,6 +201,25 @@
             <div class="uk-form-horizontal">
 
               <div class="uk-margin">
+                <label class="uk-form-label">Anonymize Service URL (danger) <span uk-icon="icon: info;" uk-tooltip title="Using an anonymization service can result in lost funds. Use only trusted services."></span></label>
+                <div class="uk-form-controls">
+                  <div uk-grid>
+                    <div class="uk-width-1-1">
+                      <div class="uk-inline uk-width-1-1">
+                        <input [(ngModel)]="anonymizerAPI" class="uk-input" id="form-horizontal-text4" type="text" [placeholder]="t('configure-app.leave-blank-to-accept-transactions-of-any-amount')">
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="uk-width-1-1">
+            <div class="uk-form-horizontal">
+
+              <div class="uk-margin">
                 <label class="uk-form-label">Default Tribe <span uk-icon="icon: info;" uk-tooltip title="This tribe will be used when creating the initial open block on a new account"></span></label>
 
                 <div class="uk-form-controls">

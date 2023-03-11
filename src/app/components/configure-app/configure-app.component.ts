@@ -161,6 +161,7 @@ export class ConfigureAppComponent implements OnInit {
   serverWS = null;
   serverAuth = null;
   minimumReceive = null;
+  anonymizerAPI = null;
 
   nodeBlockCount = null;
   nodeUnchecked = null;
@@ -282,6 +283,7 @@ export class ConfigureAppComponent implements OnInit {
     this.serverAuth = settings.serverAuth;
 
     this.minimumReceive = settings.minimumReceive;
+	this.anonymizerAPI = settings.anonymizerAPI;
     this.defaultRepresentative = settings.defaultRepresentative;
     if (this.defaultRepresentative) {
       this.validateRepresentative();
@@ -419,6 +421,7 @@ export class ConfigureAppComponent implements OnInit {
       customWorkServer: this.customWorkServer,
       pendingOption: pendingOption,
       minimumReceive: minReceive,
+	  anonymizerAPI: this.anonymizerAPI,
       defaultRepresentative: this.defaultRepresentative || null,
     };
 

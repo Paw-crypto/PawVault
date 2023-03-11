@@ -13,10 +13,16 @@ import {ConfigureWalletComponent} from './components/configure-wallet/configure-
 import {NotificationService} from './services/notification.service';
 import {NotificationsComponent} from './components/notifications/notifications.component';
 import {RaiPipe} from './pipes/rai.pipe';
+import {SafeHtmlPipe} from './pipes/safe-html.pipe';
+import {SafeUrlPipe} from './pipes/safe-url.pipe';
+import {AppUrlPipe} from './pipes/app-url.pipe';
 import {AccountsComponent} from './components/accounts/accounts.component';
 import {ApiService} from './services/api.service';
 import {AddressBookService} from './services/address-book.service';
 import {SendComponent} from './components/send/send.component';
+import {AnonymizeComponent} from './components/anonymize/anonymize.component';
+import {ThirdPartyAppComponent} from './components/thirdpartyapps/thirdpartyapp.component';
+import {AppSelectorComponent} from './components/thirdpartyapps/appselector.component';
 import {SqueezePipe} from './pipes/squeeze.pipe';
 import {ModalService} from './services/modal.service';
 import {AddressBookComponent} from './components/address-book/address-book.component';
@@ -32,7 +38,6 @@ import {NanoBlockService} from './services/nano-block.service';
 import { AccountDetailsComponent } from './components/account-details/account-details.component';
 import { TransactionDetailsComponent } from './components/transaction-details/transaction-details.component';
 import {PriceService} from './services/price.service';
-import {StakingService} from './services/staking.service';
 import { FiatPipe } from './pipes/fiat.pipe';
 import { AmountSplitPipe } from './pipes/amount-split.pipe';
 import { ImportWalletComponent } from './components/import-wallet/import-wallet.component';
@@ -80,9 +85,13 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
     ConfigureWalletComponent,
     NotificationsComponent,
     RaiPipe,
+	SafeHtmlPipe,
+	SafeUrlPipe,
+	AppUrlPipe,
     SqueezePipe,
     AccountsComponent,
     SendComponent,
+	AnonymizeComponent,
     AddressBookComponent,
     ReceiveComponent,
     WalletWidgetComponent,
@@ -112,6 +121,8 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
     MultisigComponent,
     KeygeneratorComponent,
     NanoTransactionMobileComponent,
+	ThirdPartyAppComponent,
+	AppSelectorComponent,
   ],
   imports: [
     BrowserModule,
@@ -138,7 +149,6 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
     WebsocketService,
     NanoBlockService,
     PriceService,
-    StakingService,
     PowService,
     RepresentativeService,
     NodeService,

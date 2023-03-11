@@ -26,7 +26,7 @@
             "styles": [
               "src/styles.less"
             ],
-            "scripts": ["src/scripts.js"],
+            "scripts": [],
             "allowedCommonJsDependencies": [
                "qrcode",
                "bip39",

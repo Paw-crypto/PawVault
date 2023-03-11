@@ -1,0 +1,9 @@
+
+    <h1>Apps</h1>
+	<ul>
+	  <li *ngFor="let app of apps">
+		<input type="checkbox" [(ngModel)]="app.userSelected" (ngModelChange)="app.userSelected ? onAppSelected(app) : onAppDeselected(app)" />
+		{{ app.name }}: <a href="{{ app.url }}">{{ app.url }}</a>
+	  </li>
+	</ul>
+	

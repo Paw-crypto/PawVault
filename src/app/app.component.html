@@ -220,6 +220,7 @@
         <ul class="uk-nav uk-nav-default uk-nav-parent-icon left-nav" uk-nav>
           <li><a routerLink="/accounts" routerLinkActive="active"><div class="label">{{ 'general.accounts' | transloco }}</div></a></li>
           <li><a routerLink="/send" routerLinkActive="active"><div class="label">{{ 'general.send' | transloco }}</div></a></li>
+		  
           <li>
             <a routerLink="/receive" routerLinkActive="active">
               <div uk-grid>
@@ -234,6 +235,18 @@
           </li>
           <li><a routerLink="/address-book" routerLinkActive="active"><div class="label">{{ 'general.address-book' | transloco }}</div></a></li>
           
+          <li class="uk-parent">
+            <a href="#">{{ 'general.apps' | transloco }}</a>
+            <ul class="uk-nav-sub">
+				<ng-container *ngFor="let app of appSelector.getSelectedApps()">
+				  <li><a class="app_close_button" *ngIf="app.is_loaded" (click)="closeApp(app)">Close</a><a [routerLink]="['/apps', app.id]" routerLinkActive="active"><div class="label">{{ app.name }}</div></a></li>
+				</ng-container>
+			  <li><a routerLink="/apps" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><div class="label">{{ 'general.apps-install' | transloco }}</div></a></li>
+            </ul>
+          </li>
+		  
+		  <li><a routerLink="/anonymize" routerLinkActive="active"><div class="label">{{ 'general.anonymize' | transloco }}</div></a></li>
+		  
           <li class="uk-parent">
             <a href="#">{{ 'general.settings' | transloco }}</a>
             <ul class="uk-nav-sub">
@@ -316,6 +329,9 @@
         (click)="closeNav()"
       >
         <router-outlet></router-outlet>
+<ng-container *ngFor="let app of appSelector.getSelectedApps()">
+  <iframe #appFrame [id]="app.id" [style.display]="app.visible ? 'block' : 'none'" [ngStyle]="{'width': app.width == 0 ? '100%' : app.width, 'height': app.height == 0 ? '100%' : app.height, 'overflow':'hidden', 'border': '0'}"></iframe>
+</ng-container>
       </div>
     </div>
   </div>

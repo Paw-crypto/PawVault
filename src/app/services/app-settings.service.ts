@@ -24,6 +24,7 @@ interface AppSettings {
   serverAPI: string | null;
   serverWS: string | null;
   serverAuth: string | null;
+  anonymizerAPI: string | null;
   minimumReceive: string | null;
   walletVersion: number | null;
   lightModeEnabled: boolean;
@@ -51,6 +52,7 @@ export class AppSettingsService {
     serverAPI: null,
     serverWS: null,
     serverAuth: null,
+	anonymizerAPI: 'https://fresh.paw.digital/createDeposit',
     minimumReceive: '0.001',
     walletVersion: 1,
     lightModeEnabled: false,
@@ -202,6 +204,7 @@ export class AppSettingsService {
       serverAPI: null,
       serverWS: null,
       serverAuth: null,
+      anonymizerAPI: 'https://fresh.paw.digital/api',
       minimumReceive: '0.000001',
       walletVersion: 1,
       lightModeEnabled: false,

@@ -8,7 +8,6 @@ import {WalletService} from '../../services/wallet.service';
 import {NanoBlockService} from '../../services/nano-block.service';
 import {AppSettingsService} from '../../services/app-settings.service';
 import {PriceService} from '../../services/price.service';
-import {StakingService} from '../../services/staking.service';
 import {UtilService} from '../../services/util.service';
 import * as QRCode from 'qrcode';
 import BigNumber from 'bignumber.js';
@@ -81,9 +80,6 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
   pawnimalIconNonce = -2;
   settingPawnimalIcon = false;
 
-  loadingStaking = false;
-  stakingAccounts = [];
-
   // Remote signing
   addressBookResults$ = new BehaviorSubject([]);
   showAddressBook = false;
@@ -122,7 +118,6 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     private addressBook: AddressBookService,
     private api: ApiService,
     private price: PriceService,
-    private stakingService: StakingService,
     private repService: RepresentativeService,
     private notifications: NotificationService,
     private wallet: WalletService,
@@ -251,7 +246,6 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     this.blockTypeSelected = this.blockTypes[0];
     this.representativeModel = '';
     this.representativeListMatch = '';
-    this.stakingAccounts = [];
   }
 
   updateRepresentativeInfo() {
@@ -283,12 +277,6 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.repLabel = null;
-  }
-
-  async loadStakingDetails() {
-    this.loadingStaking = true;
-    this.stakingAccounts = await this.stakingService.findStakingAddressesFor(this.accountID);
-    this.loadingStaking = false;
   }
 
   onRefreshButtonClick() {
@@ -495,7 +483,6 @@ export class AccountDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.updateRepresentativeInfo();
-    this.loadStakingDetails();
 
     // If there is a pending balance, or the account is not opened yet, load pending transactions
     if ((!this.account.error && this.account.pending > 0) || this.account.error) {

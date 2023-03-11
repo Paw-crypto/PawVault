@@ -4,6 +4,9 @@ import {WelcomeComponent} from './welcome/welcome.component';
 import {ConfigureWalletComponent} from './components/configure-wallet/configure-wallet.component';
 import {AccountsComponent} from './components/accounts/accounts.component';
 import {SendComponent} from './components/send/send.component';
+import {AnonymizeComponent} from './components/anonymize/anonymize.component';
+import {ThirdPartyAppComponent} from './components/thirdpartyapps/thirdpartyapp.component';
+import {AppSelectorComponent} from './components/thirdpartyapps/appselector.component';
 import {AddressBookComponent} from './components/address-book/address-book.component';
 import {ReceiveComponent} from './components/receive/receive.component';
 import {ManageWalletComponent} from './components/manage-wallet/manage-wallet.component';
@@ -36,6 +39,14 @@ const routes: Routes = [
   { path: 'manage-wallet', component: ManageWalletComponent },
   { path: 'qr-scan', component: QrScanComponent },
   { path: 'send', component: SendComponent },
+  { path: 'anonymize', component: AnonymizeComponent },
+  { path: 'rewards', component: ThirdPartyAppComponent },
+  { path: 'swap', component: ThirdPartyAppComponent },
+  { path: 'trade', component: ThirdPartyAppComponent },
+  { path: 'market', component: ThirdPartyAppComponent },
+  { path: 'crowdfund', component: ThirdPartyAppComponent },
+  { path: 'apps', component: AppSelectorComponent },
+  { path: 'apps/:id', component: ThirdPartyAppComponent },
   { path: 'receive', component: ReceiveComponent },
   { path: 'representatives', component: RepresentativesComponent },
   { path: 'manage-representatives', component: ManageRepresentativesComponent },
