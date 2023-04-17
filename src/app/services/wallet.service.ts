@@ -95,7 +95,7 @@ export interface WalletApiAccount extends BaseApiAccount {
 @Injectable()
 export class WalletService {
   nano = 10000000000000000000000000;
-  storeKey = `nanovault-wallet`;
+  storeKey = `biome-paw-wallet`;
 
   wallet: FullWallet = {
     type: 'seed',
@@ -703,7 +703,7 @@ export class WalletService {
     this.wallet.updatingBalance = true;
     const fiatPrice = this.price.price.lastPrice;
 
-    const accountIDs = this.wallet.accounts.map(a => a.id.replace('nano_', 'paw_'));
+    const accountIDs = this.wallet.accounts.map(a => a.id.replace('nano_', 'paw_').replace('adia_', 'paw_'));
     console.log(accountIDs);
     const accounts = await this.api.accountsBalances(accountIDs);
     console.log(accounts);
@@ -796,7 +796,11 @@ export class WalletService {
             if (walletAccount.pending.gt(0)) {
               console.log('Adding single pending account within limit to work cache');
               // Use frontier or public key if open block
-              const hash = walletAccount.frontier || this.util.account.getAccountPublicKey(walletAccount.id);
+			  let hash = '';
+			  if(walletAccount.frontier && walletAccount.frontier.indexOf('Account not found') != -1)
+				hash = this.util.account.getAccountPublicKey(walletAccount.id);
+			  else
+				hash = walletAccount.frontier || this.util.account.getAccountPublicKey(walletAccount.id);
               // Technically should be 1/64 multiplier here but since we don't know if the pending will be received before
               // a send or change block is made it's safer to use 1x PoW threshold to be sure the cache will work.
               // On the other hand, it may be more efficient to use 1/64 and simply let the work cache rework
@@ -829,8 +833,12 @@ export class WalletService {
 
     // Make sure any frontiers are in the work pool
     // If they have no frontier, we want to use their pub key?
-    const hashes = this.wallet.accounts.filter(account => (account.receivePow === false)).
-      map(account => account.frontier || this.util.account.getAccountPublicKey(account.id));
+    const hashes = this.wallet.accounts.filter(account => !account.receivePow).map(walletAccount => {
+		const publicKey = this.util.account.getAccountPublicKey(walletAccount.id);
+		const hasNotFound = walletAccount.frontier && walletAccount.frontier.indexOf('Account not found') !== -1;
+		const frontier = hasNotFound ? null : walletAccount.frontier;
+		return frontier || publicKey;
+	});
     console.log('Adding non-pending frontiers to work cache');
     hashes.forEach(hash => this.workPool.addWorkToCache(hash, 1)); // use high pow here since we don't know what tx type will be next
 

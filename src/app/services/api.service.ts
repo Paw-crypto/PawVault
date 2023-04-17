@@ -31,6 +31,8 @@ export class ApiService {
     }
     return await this.http.post(apiUrl, data, header).toPromise()
       .then(res => {
+		// Replace any occurrence of "aida_" with "paw_" in the response
+		res = JSON.parse(JSON.stringify(res).replace(/adia_/g, 'paw_'));
         this.node.setOnline();
         return res;
       })
