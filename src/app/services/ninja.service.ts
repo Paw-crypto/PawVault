@@ -7,7 +7,7 @@ import { UtilService } from './util.service';
 export class NinjaService {
 
   // URL to Ninja API
-  ninjaUrl = 'https://tribes.paw.digital/api/';
+  ninjaUrl = 'https://arcnodes.arcadiacoin.net/api/';
 
   // null - loading, false - offline, true - online
   status = null;
